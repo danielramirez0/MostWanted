@@ -13,7 +13,48 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-      let traitsSearchAmount = promptFor(`Here are the available traits:\n${Object.keys(people[0]).join(", ")}\nHow many traits would you like use in your search?(type a number)`, checkForNumber);
+      let traitList = Object.keys(people[0]);
+      searchType = String(
+        promptFor(
+          `Here are the available traits:\n${traitList.join(" ").toLowerCase()}\n\nYou can search by as many as you like.\n\n To use multiple, separate them by a comman (ex. id,gender,dob)`,
+          chars
+        )
+      ).split(",");
+      searchResults = [];
+      let uniqueResult;
+      for (let i = 0; i < searchType.length; i++) {
+        const traitSearch = searchType[i].toLowerCase();
+        console.log(typeof traitSearch);
+        console.log(traitSearch);
+        switch (traitSearch) {
+          case "id":
+            uniqueResult = searchByid(people);
+            break;
+          case "gender":
+            uniqueResult = searchByGender(people);
+            break;
+          case "dob":
+            uniqueResult = searchByDOB(people);
+            break;
+          case "height":
+            uniqueResult = searchByHeight(people);
+            break;
+          case "weight":
+            uniqueResult = searchByWeight(people);
+            break;
+          case "eyecolor":
+            uniqueResult = searchByEyeColor(people);
+            break;
+          case "occupation":
+            uniqueResult = searchByOccupation(people);
+            break;
+          default:
+            // recursive call here??
+            break;
+        }
+        searchResults.push(uniqueResult);
+      }
+      console.log(searchResults);
       break;
     default:
       app(people); // restart app

@@ -2,42 +2,6 @@
 /*
 Build all of your functions for displaying and gathering information below (GUI).
 */
-/*
-function searchByName(people) {
-  let firstName = promptFor("What is the person's first name?", chars);
-  let lastName = promptFor("What is the person's last name?", chars);
-
-  let foundPerson = people.filter(function (person) {
-    if (person.firstName === firstName && person.lastName === lastName) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  // TODO: find the person using the name they entered
-  return foundPerson;
-}
-*/
-
-function filterObject(array) {}
-
-function searchByGender(people) {
-  let gender = promptFor("What is the person's gender?", chars);
-  let foundPerson = people.filter(function (person) {
-    if (person.gender === gender) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  // TODO: find the person using the name they entered
-  return foundPerson;
-}
-function searchByDOB(people) {}
-function searchByHeight(people) {}
-function searchByWeight(people) {}
-function searchByEyeColor(people) {}
-function searchByOccupation(people) {}
 
 // app is the function called to start the entire application
 function app(people) {
@@ -49,9 +13,7 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-
-      let traitsSearchAmount = promptFor(`Here are the available traits:\n ${Object.keys(people[0]).join(", ")}\nHow many traits would you like use in your search?(type a number)`, checkForNumber);
-
+      let traitsSearchAmount = promptFor(`Here are the available traits:\n${Object.keys(people[0]).join(", ")}\nHow many traits would you like use in your search?(type a number)`, checkForNumber);
       break;
     default:
       app(people); // restart app
@@ -93,6 +55,7 @@ function mainMenu(person, people) {
   }
 }
 
+// Methods of searching
 function searchByName(people) {
   let firstName = promptFor("What is the person's first name?", chars);
   let lastName = promptFor("What is the person's last name?", chars);
@@ -105,6 +68,72 @@ function searchByName(people) {
     }
   });
   // TODO: find the person using the name they entered
+  return foundPerson;
+}
+function searchByGender(people) {
+  let gender = promptFor("What is the person's gender?", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person.gender === gender) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByDOB(people) {
+  let dob = promptFor("What is the person's birthday?\n Use the following format: mm/dd/yyyy", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person.dob === dob) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByHeight(people) {
+  let height = promptFor("What is the person's height in inches?", checkForNumber);
+  let foundPerson = people.filter(function (person) {
+    if (person.height === height) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByWeight(people) {
+  let weight = promptFor("What is the person's weight in pounds?", checkForNumber);
+  let foundPerson = people.filter(function (person) {
+    if (person.weight === weight) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByEyeColor(people) {
+  let eyeColor = promptFor("What is the person's eye color?", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person.eyeColor === eyeColor) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByOccupation(people) {
+  let occupation = promptFor("What is the person's occupation in inches?", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person.occupation === occupation) {
+      return true;
+    } else {
+      return false;
+    }
+  });
   return foundPerson;
 }
 

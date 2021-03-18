@@ -56,6 +56,17 @@ function mainMenu(person, people) {
 }
 
 // Methods of searching
+function searchByid(people) {
+  let id = promptFor("What is the person's id number?", checkForNumber);
+  let foundPerson = people.filter(function (person) {
+    if (person.id === id) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
 function searchByName(people) {
   let firstName = promptFor("What is the person's first name?", chars);
   let lastName = promptFor("What is the person's last name?", chars);
@@ -126,9 +137,32 @@ function searchByEyeColor(people) {
   return foundPerson;
 }
 function searchByOccupation(people) {
-  let occupation = promptFor("What is the person's occupation in inches?", chars);
+  let occupation = promptFor("What is the person's occupation?", chars);
   let foundPerson = people.filter(function (person) {
     if (person.occupation === occupation) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByParents(people) {
+  let parents = promptFor("What is the person's parent's id number?", checkForNumber);
+  let foundPerson = people.filter(function (person) {
+    if (person.parents === parents) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+
+function searchByCurrentSpouse(people) {
+  let currentSpouse = promptFor("What is the person's currentSpouse's id number?", checkForNumber);
+  let foundPerson = people.filter(function (person) {
+    if (person.currentSpouse === currentSpouse) {
       return true;
     } else {
       return false;

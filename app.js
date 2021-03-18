@@ -49,7 +49,8 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-      let traitsSearchAmount = promptFor(`Here are the available traits:\n ${Object.keys(people[0]).join("    ")}\nHow many would you like use in your search? `).toLowerCase();
+
+      let traitsSearchAmount = promptFor(`Here are the available traits:\n ${Object.keys(people[0]).join(", ")}\nHow many traits would you like use in your search?(type a number)`, checkForNumber);
 
       break;
     default:
@@ -143,4 +144,8 @@ function yesNo(input) {
 // helper function to pass in as default promptFor validation
 function chars(input) {
   return true; // default validation only
+}
+// helper function to pass into promptFor to validate number inputs
+function checkForNumber(input) {
+  return !isNaN(input);
 }

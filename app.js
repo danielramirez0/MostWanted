@@ -38,7 +38,7 @@ function mainMenu(person, people) {
 
   switch (displayOption) {
     case "info":
-      // TODO: get person's info
+      displayPerson(person);
       break;
     case "family":
       // TODO: get person's family
@@ -121,7 +121,7 @@ function searchByName(people) {
       return false;
     }
   });
-  // TODO: find the person using the name they entered
+  foundPerson = foundPerson[0];
   return foundPerson;
 }
 function searchByGender(people) {
@@ -230,6 +230,8 @@ function displayPerson(person) {
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }

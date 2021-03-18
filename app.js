@@ -49,8 +49,8 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-      let searchTrait = promptFor("What trait do you know about them? ").toLowerCase();
-      searchByTrait(searchTrait, people);
+      let traitsSearchAmount = promptFor(`Here are the available traits:\n ${Object.keys(people[0]).join("    ")}\nHow many would you like use in your search? `).toLowerCase();
+
       break;
     default:
       app(people); // restart app
@@ -127,7 +127,6 @@ function displayPerson(person) {
   alert(personInfo);
 }
 
-promptFor("Is your name Nevin?", yesNo);
 // function that prompts and validates user input
 function promptFor(question, valid) {
   do {

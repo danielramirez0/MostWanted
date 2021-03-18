@@ -14,47 +14,7 @@ function app(people) {
     case "no":
       // TODO: search by traits
       let traitList = Object.keys(people[0]);
-      searchType = String(
-        promptFor(
-          `Here are the available traits:\n${traitList.join(" ").toLowerCase()}\n\nYou can search by as many as you like.\n\n To use multiple, separate them by a comman (ex. id,gender,dob)`,
-          chars
-        )
-      ).split(",");
-      searchResults = [];
-      let uniqueResult;
-      for (let i = 0; i < searchType.length; i++) {
-        const traitSearch = searchType[i].toLowerCase();
-        console.log(typeof traitSearch);
-        console.log(traitSearch);
-        switch (traitSearch) {
-          case "id":
-            uniqueResult = searchByid(people);
-            break;
-          case "gender":
-            uniqueResult = searchByGender(people);
-            break;
-          case "dob":
-            uniqueResult = searchByDOB(people);
-            break;
-          case "height":
-            uniqueResult = searchByHeight(people);
-            break;
-          case "weight":
-            uniqueResult = searchByWeight(people);
-            break;
-          case "eyecolor":
-            uniqueResult = searchByEyeColor(people);
-            break;
-          case "occupation":
-            uniqueResult = searchByOccupation(people);
-            break;
-          default:
-            // recursive call here??
-            break;
-        }
-        searchResults.push(uniqueResult);
-      }
-      console.log(searchResults);
+      searchResults = startSearchingByTraits(traitList, people);
       break;
     default:
       app(people); // restart app
@@ -95,10 +55,49 @@ function mainMenu(person, people) {
       return mainMenu(person, people); // ask again
   }
 }
-
+function startSearchingByTraits(traits, people) {
+  let searchType = promptFor(
+    `Here are the available traits:\n\n${traits.join(" ").toLowerCase()}\n\nYou can search by as many as you like.\n\n To use multiple, separate them by a comman (ex. id,gender,dob)`,
+    chars
+  ).split(",");
+  let searchResults = [];
+  for (let i = 0; i < searchType.length; i++) {
+    let uniqueResult = "";
+    let traitSearch = searchType[i].toLowerCase();
+    switch (traitSearch) {
+      case "id":
+        uniqueResult = searchByid(people);
+        break;
+      case "gender":
+        uniqueResult = searchByGender(people);
+        break;
+      case "dob":
+        uniqueResult = searchByDOB(people);
+        break;
+      case "height":
+        uniqueResult = searchByHeight(people);
+        break;
+      case "weight":
+        uniqueResult = searchByWeight(people);
+        break;
+      case "eyecolor":
+        uniqueResult = searchByEyeColor(people);
+        break;
+      case "occupation":
+        uniqueResult = searchByOccupation(people);
+        break;
+      default:
+        // recursive call here??
+        break;
+    }
+    uniqueResult === "" ? null : searchResults.push(uniqueResult);
+  }
+  console.log(searchResults);
+  return searchResults;
+}
 // Methods of searching
 function searchByid(people) {
-  let id = promptFor("What is the person's id number?", checkForNumber);
+  let id = Number(promptFor("What is the person's id number?", checkForNumber));
   let foundPerson = people.filter(function (person) {
     if (person.id === id) {
       return true;
@@ -111,6 +110,9 @@ function searchByid(people) {
 function searchByName(people) {
   let firstName = promptFor("What is the person's first name?", chars);
   let lastName = promptFor("What is the person's last name?", chars);
+
+  firstName = firstName[0].toUpperCase() + firstName.slice(1).toLowerCase();
+  lastName = lastName[0].toUpperCase() + lastName.slice(1).toLowerCase();
 
   let foundPerson = people.filter(function (person) {
     if (person.firstName === firstName && person.lastName === lastName) {
@@ -145,7 +147,7 @@ function searchByDOB(people) {
   return foundPerson;
 }
 function searchByHeight(people) {
-  let height = promptFor("What is the person's height in inches?", checkForNumber);
+  let height = Number(promptFor("What is the person's height in inches?", checkForNumber));
   let foundPerson = people.filter(function (person) {
     if (person.height === height) {
       return true;
@@ -156,7 +158,7 @@ function searchByHeight(people) {
   return foundPerson;
 }
 function searchByWeight(people) {
-  let weight = promptFor("What is the person's weight in pounds?", checkForNumber);
+  let weight = Number(promptFor("What is the person's weight in pounds?", checkForNumber));
   let foundPerson = people.filter(function (person) {
     if (person.weight === weight) {
       return true;
@@ -189,7 +191,7 @@ function searchByOccupation(people) {
   return foundPerson;
 }
 function searchByParents(people) {
-  let parents = promptFor("What is the person's parent's id number?", checkForNumber);
+  let parents = Number(promptFor("What is the person's parent's id number?", checkForNumber));
   let foundPerson = people.filter(function (person) {
     if (person.parents === parents) {
       return true;
@@ -201,7 +203,7 @@ function searchByParents(people) {
 }
 
 function searchByCurrentSpouse(people) {
-  let currentSpouse = promptFor("What is the person's currentSpouse's id number?", checkForNumber);
+  let currentSpouse = Number(promptFor("What is the person's currentSpouse's id number?", checkForNumber));
   let foundPerson = people.filter(function (person) {
     if (person.currentSpouse === currentSpouse) {
       return true;
@@ -249,6 +251,7 @@ function yesNo(input) {
 function chars(input) {
   return true; // default validation only
 }
+
 // helper function to pass into promptFor to validate number inputs
 function checkForNumber(input) {
   return !isNaN(input);

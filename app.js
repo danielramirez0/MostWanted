@@ -51,7 +51,8 @@ function mainMenu(person, people) {
       break;
     case "descendants":
       // TODO: get person's descendants
-      getDecendants(person, people);
+      let lineage = getChildren(person, people);
+      displayDescendants(person, lineage);
       break;
     case "restart":
       app(people); // restart
@@ -260,21 +261,27 @@ function selectUniqueFromList(filteredPeople) {
   return filteredPeople;
 }
 
-function getDecendants(person, people) {
-  let parentID = person.id;
-  let descendants = [];
+function getChildren(person, people) {
+  let children = [];
+  let grandChildren = [];
   for (let i = 0; i < people.length; i++) {
-    if (people[i].parents.includes(parentID)) {
-      descendants.push(people[i]);
+    if (people[i].parents.includes(person.id)) {
+      children.push(people[i]);
     }
   }
-  if (descendants.length > 0) {
-    let message = [];
-    for (let i = 0; i < descendants.length; i++) {
-      message.push(getFirstAndLastNameFromObject(descendants[i]));
+  if (children.length > 0) {
+    for (let i = 0; i < children.length; i++) {
+      grandChildren = getChildren(children[i], people);
     }
-    alert(message);
+  } else {
+    return children;
   }
+  if (grandChildren.length > 0) {
+    for (let j = 0; j < grandChildren.length; j++) {
+      children.push(grandChildren[j]);
+    }
+  }
+  return children;
 }
 
 function getFirstAndLastNameFromObject(obj) {
@@ -284,6 +291,12 @@ function getFirstAndLastNameFromObject(obj) {
   // return fullName
 }
 
+function displayDescendants(person, descendants) {
+  descendants = descendants.map(function (descendant) {
+    return descendant.firstName + " " + descendant.lastName;
+  });
+  alert(`${person.firstName} ${person.lastName}'s descendants are:\n${descendants.join("\n")}`);
+}
 // alerts a list of people
 function displayPeople(people) {
   alert(

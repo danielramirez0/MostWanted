@@ -3,6 +3,20 @@
 Build all of your functions for displaying and gathering information below (GUI).
 */
 
+function selectUniqueFromList(filteredPeople) {
+  let names = [];
+  for (let i = 0; i < filteredPeople.length; i++) {
+    names.push(filteredPeople[i].firstName + " " + filteredPeople[i].lastName);
+  }
+  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names}\n` + "Do you want to search by name?", yesNo);
+  if (selection === "yes") {
+    filteredPeople = searchByName(filteredPeople);
+  } else {
+    app(people);
+  }
+  return filteredPeople;
+}
+
 // app is the function called to start the entire application
 function app(people) {
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
@@ -13,9 +27,12 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-      let runs = Number(promptFor("How many traits do you know about this person?", checkForNumber));
-      for (let i = 0; i < runs.length; i++) {
-        searchResults = startSearchingByTraits(people);
+      let numberOfKnownTraits = parseInt(promptFor("How many traits do you know about this person?", checkForNumber));
+      for (let i = 0; i < numberOfKnownTraits; i++) {
+        searchResults = startSearchingByTraits(i === 0 ? people : searchResults);
+      }
+      if (searchResults.length > 1) {
+        searchResults = selectUniqueFromList(searchResults);
       }
       break;
     default:

@@ -3,20 +3,6 @@
 Build all of your functions for displaying and gathering information below (GUI).
 */
 
-function selectUniqueFromList(filteredPeople) {
-  let names = [];
-  for (let i = 0; i < filteredPeople.length; i++) {
-    names.push(filteredPeople[i].firstName + " " + filteredPeople[i].lastName);
-  }
-  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names}\n` + "Do you want to search by name?", yesNo);
-  if (selection === "yes") {
-    filteredPeople = searchByName(filteredPeople);
-  } else {
-    app(people);
-  }
-  return filteredPeople;
-}
-
 // app is the function called to start the entire application
 function app(people) {
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
@@ -26,7 +12,6 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case "no":
-      // TODO: search by traits
       let numberOfKnownTraits = parseInt(promptFor("How many traits do you know about this person?", checkForNumber));
       for (let i = 0; i < numberOfKnownTraits; i++) {
         searchResults = startSearchingByTraits(i === 0 ? people : searchResults);
@@ -66,6 +51,7 @@ function mainMenu(person, people) {
       break;
     case "descendants":
       // TODO: get person's descendants
+      getDecendants(person, people);
       break;
     case "restart":
       app(people); // restart
@@ -76,6 +62,8 @@ function mainMenu(person, people) {
       return mainMenu(person, people); // ask again
   }
 }
+
+// Search for person by selected traits
 function startSearchingByTraits(people) {
   let searchResults;
   let traits = Object.keys(people[0]);
@@ -85,10 +73,10 @@ function startSearchingByTraits(people) {
     case "id":
       searchResults = searchByid(people);
       break;
-    case "firstName":
+    case "firstname":
       searchResults = searchByFirstName(people);
       break;
-    case "lastName":
+    case "lastname":
       searchResults = searchByLastName(people);
       break;
     case "gender":
@@ -111,7 +99,6 @@ function startSearchingByTraits(people) {
       break;
     default:
       return startSearchingByTraits(people);
-      break;
   }
   return searchResults;
 }
@@ -257,6 +244,24 @@ function searchByFirstName(people) {
   });
   return foundPerson;
 }
+
+// Secelction of person after search filtering
+function selectUniqueFromList(filteredPeople) {
+  let names = [];
+  for (let i = 0; i < filteredPeople.length; i++) {
+    names.push(filteredPeople[i].firstName + " " + filteredPeople[i].lastName);
+  }
+  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names}\n` + "Do you want to search by name?", yesNo);
+  if (selection === "yes") {
+    filteredPeople = searchByName(filteredPeople);
+  } else {
+    app(people);
+  }
+  return filteredPeople;
+}
+
+function getDecendants(person, people) {}
+
 // alerts a list of people
 function displayPeople(people) {
   alert(
@@ -277,7 +282,6 @@ function displayPerson(person) {
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyeColor + "\n";
   personInfo += "Occupation: " + person.occupation + "\n";
-  // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }
 

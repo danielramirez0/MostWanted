@@ -26,7 +26,7 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case "no":
-      // TODO: search by traits
+    
       let numberOfKnownTraits = parseInt(promptFor("How many traits do you know about this person?", checkForNumber));
       for (let i = 0; i < numberOfKnownTraits; i++) {
         searchResults = startSearchingByTraits(i === 0 ? people : searchResults);
@@ -277,6 +277,7 @@ function displayPerson(person) {
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyeColor + "\n";
   personInfo += "Occupation: " + person.occupation + "\n";
+  personInfo += "Age " + person.age + "\n";
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }

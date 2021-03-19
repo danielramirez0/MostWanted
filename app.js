@@ -234,7 +234,8 @@ function searchByCurrentSpouse(people) {
   return foundPerson;
 }
 function searchByLastName(people) {
-  let lastName = Number(promptFor("What is the person last name?", checkForNumber));
+  let lastName = promptFor("What is the person's last name?", chars);
+  lastName = lastName[0].toUpperCase() + lastName.slice(1).toLowerCase();
   let foundPerson = people.filter(function (person) {
     if (person.lastName === lastName) {
       return true;
@@ -245,7 +246,8 @@ function searchByLastName(people) {
   return foundPerson;
 }
 function searchByFirstName(people) {
-  let firstName = Number(promptFor("What is the person's first name?", checkForNumber));
+  let firstName = promptFor("What is the person's first name?", chars);
+  firstName = firstName[0].toUpperCase() + firstName.slice(1).toLowerCase();
   let foundPerson = people.filter(function (person) {
     if (person.firstName === firstName) {
       return true;

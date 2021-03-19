@@ -260,7 +260,17 @@ function selectUniqueFromList(filteredPeople) {
   return filteredPeople;
 }
 
-function getDecendants(person, people) {}
+function getDecendants(person, people) {
+  let descendants;
+  let parent;
+  for (let i = 0; i < people.length; i++) {
+    if (people[i].parents.includes(person.id)) {
+      parent = searchByid(people[i].parents[0]);
+      alert(parent);
+      alert(people[i]);
+    }
+  }
+}
 
 // alerts a list of people
 function displayPeople(people) {

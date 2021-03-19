@@ -282,6 +282,7 @@ function displayPerson(person) {
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyeColor + "\n";
   personInfo += "Occupation: " + person.occupation + "\n";
+  personInfo += "Age " + person.age + "\n";
   alert(personInfo);
 }
 

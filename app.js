@@ -227,7 +227,28 @@ function searchByCurrentSpouse(people) {
   });
   return foundPerson;
 }
-
+function searchByLastName(people) {
+  let lastName = Number(promptFor("What is the person last name?", checkForNumber));
+  let foundPerson = people.filter(function (person) {
+    if (person.lastName === lastName) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
+function searchByFirstName(people) {
+  let firstName = Number(promptFor("What is the person's first name?", checkForNumber));
+  let foundPerson = people.filter(function (person) {
+    if (person.firstName === firstName) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
 // alerts a list of people
 function displayPeople(people) {
   alert(

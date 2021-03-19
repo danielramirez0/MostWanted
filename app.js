@@ -13,8 +13,10 @@ function app(people) {
       break;
     case "no":
       // TODO: search by traits
-      let traitList = Object.keys(people[0]);
-      searchResults = startSearchingByTraits(traitList, people);
+      let runs = Number(promptFor("How many traits do you know about this person?", checkForNumber));
+      for (let i = 0; i < runs.length; i++) {
+        searchResults = startSearchingByTraits(people);
+      }
       break;
     default:
       app(people); // restart app
@@ -55,44 +57,37 @@ function mainMenu(person, people) {
       return mainMenu(person, people); // ask again
   }
 }
-function startSearchingByTraits(traits, people) {
-  let searchType = promptFor(
-    `Here are the available traits:\n\n${traits.join(" ").toLowerCase()}\n\nYou can search by as many as you like.\n\n To use multiple, separate them by a comman (ex. id,gender,dob)`,
-    chars
-  ).split(",");
-  let searchResults = [];
-  for (let i = 0; i < searchType.length; i++) {
-    let uniqueResult = "";
-    let traitSearch = searchType[i].toLowerCase();
-    switch (traitSearch) {
-      case "id":
-        uniqueResult = searchByid(people);
-        break;
-      case "gender":
-        uniqueResult = searchByGender(people);
-        break;
-      case "dob":
-        uniqueResult = searchByDOB(people);
-        break;
-      case "height":
-        uniqueResult = searchByHeight(people);
-        break;
-      case "weight":
-        uniqueResult = searchByWeight(people);
-        break;
-      case "eyecolor":
-        uniqueResult = searchByEyeColor(people);
-        break;
-      case "occupation":
-        uniqueResult = searchByOccupation(people);
-        break;
-      default:
-        // recursive call here??
-        break;
-    }
-    uniqueResult === "" ? null : searchResults.push(uniqueResult);
+function startSearchingByTraits(people) {
+  let searchResults;
+  let traits = Object.keys(people[0]);
+  let searchType = promptFor(`Here are the available traits:\n\n${traits.join(" ").toLowerCase()}\n\nWhich trait do you want to use?`, chars);
+  let traitSearch = searchType.toLowerCase();
+  switch (traitSearch) {
+    case "id":
+      searchResults = searchByid(people);
+      break;
+    case "gender":
+      searchResults = searchByGender(people);
+      break;
+    case "dob":
+      searchResults = searchByDOB(people);
+      break;
+    case "height":
+      searchResults = searchByHeight(people);
+      break;
+    case "weight":
+      searchResults = searchByWeight(people);
+      break;
+    case "eyecolor":
+      searchResults = searchByEyeColor(people);
+      break;
+    case "occupation":
+      searchResults = searchByOccupation(people);
+      break;
+    default:
+      // recursive call here??
+      break;
   }
-  console.log(searchResults);
   return searchResults;
 }
 // Methods of searching

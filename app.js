@@ -85,6 +85,12 @@ function startSearchingByTraits(people) {
     case "id":
       searchResults = searchByid(people);
       break;
+    case "firstName":
+      searchResults = searchByFirstName(people);
+      break;
+    case "lastName":
+      searchResults = searchByLastName(people);
+      break;
     case "gender":
       searchResults = searchByGender(people);
       break;
@@ -104,7 +110,7 @@ function startSearchingByTraits(people) {
       searchResults = searchByOccupation(people);
       break;
     default:
-      // recursive call here??
+      return startSearchingByTraits(people);
       break;
   }
   return searchResults;

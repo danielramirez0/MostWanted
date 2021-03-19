@@ -33,6 +33,8 @@ function app(people) {
       }
       if (searchResults.length > 1) {
         searchResults = selectUniqueFromList(searchResults);
+      } else {
+        searchResults = searchResults[0];
       }
       break;
     default:

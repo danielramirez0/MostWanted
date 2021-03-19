@@ -261,15 +261,27 @@ function selectUniqueFromList(filteredPeople) {
 }
 
 function getDecendants(person, people) {
-  let descendants;
-  let parent;
+  let parentID = person.id;
+  let descendants = [];
   for (let i = 0; i < people.length; i++) {
-    if (people[i].parents.includes(person.id)) {
-      parent = searchByid(people[i].parents[0]);
-      alert(parent);
-      alert(people[i]);
+    if (people[i].parents.includes(parentID)) {
+      descendants.push(people[i]);
     }
   }
+  if (descendants.length > 0) {
+    let message = [];
+    for (let i = 0; i < descendants.length; i++) {
+      message.push(getFirstAndLastNameFromObject(descendants[i]));
+    }
+    alert(message);
+  }
+}
+
+function getFirstAndLastNameFromObject(obj) {
+  return `${obj.firstName} ${obj.lastName}`;
+  // let fullName = "First Name: " + obj.firstName + "\n";
+  // fullName += "Last Name: " + obj.lastName + "\n";
+  // return fullName
 }
 
 // alerts a list of people

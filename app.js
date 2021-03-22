@@ -17,7 +17,7 @@ function app(people) {
         searchResults = startSearchingByTraits(i === 0 ? people : searchResults);
       }
       if (searchResults.length > 1) {
-        searchResults = selectUniqueFromList(searchResults);
+        searchResults = getUniquePersonFrom(searchResults);
       } else {
         searchResults = searchResults[0];
       }
@@ -68,7 +68,7 @@ function mainMenu(person, people) {
 function startSearchingByTraits(people) {
   let searchResults;
   let traits = Object.keys(people[0]);
-  let searchType = promptFor(`Here are the available traits:\n\n${traits.join(" ").toLowerCase()}\n\nWhich trait do you want to use?`, chars);
+  let searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
   let traitSearch = searchType.toLowerCase();
   switch (traitSearch) {
     case "id":
@@ -247,40 +247,42 @@ function searchByFirstName(people) {
 }
 
 // Secelction of person after search filtering
-function selectUniqueFromList(filteredPeople) {
+function getUniquePersonFrom(filteredPeople) {
   let names = [];
+  let uniquePerson;
   for (let i = 0; i < filteredPeople.length; i++) {
     names.push(filteredPeople[i].firstName + " " + filteredPeople[i].lastName);
   }
-  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names}\n` + "Do you want to search by name?", yesNo);
+  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names.join("\n")}\n\n` + "Do you want to search by name?", yesNo);
   if (selection === "yes") {
-    filteredPeople = searchByName(filteredPeople);
+    uniquePerson = searchByName(filteredPeople);
   } else {
-    app(people);
+    // app(people);
+    return;
   }
-  return filteredPeople;
+  return uniquePerson;
 }
 
 function getChildren(person, people) {
   let children = [];
-  let grandChildren = [];
+  // let grandChildren = [];
   for (let i = 0; i < people.length; i++) {
     if (people[i].parents.includes(person.id)) {
       children.push(people[i]);
     }
   }
-  if (children.length > 0) {
-    for (let i = 0; i < children.length; i++) {
-      grandChildren = getChildren(children[i], people);
-    }
-  } else {
-    return children;
-  }
-  if (grandChildren.length > 0) {
-    for (let j = 0; j < grandChildren.length; j++) {
-      children.push(grandChildren[j]);
-    }
-  }
+  // if (children.length > 0) {
+  // for (let i = 0; i < children.length; i++) {
+  // grandChildren = getChildren(children[i], people);
+  // }
+  // } else {
+  // return children;
+  // }
+  // if (grandChildren.length > 0) {
+  // for (let j = 0; j < grandChildren.length; j++) {
+  // children.push(grandChildren[j]);
+  // }
+  // }
   return children;
 }
 

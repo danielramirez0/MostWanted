@@ -323,6 +323,14 @@ function getSiblings(person, people) {
   return parents;
 }
 
+function getSpouse(person, people) {
+  for (let i = 0; i < people.length; i++) {
+    if (people[i].id === person.currentSpouse) {
+      return people[i];
+    }
+  }
+}
+
 function getFamilyTree(person, callback) {}
 
 function getFirstAndLastNameFromObject(obj) {

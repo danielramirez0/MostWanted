@@ -48,6 +48,23 @@ function mainMenu(person, people) {
       break;
     case "family":
       // TODO: get person's family
+      let family = [];
+
+      let siblings = getSiblings(person, people)
+        .map(function (sibling) {
+          return "Sibling: " + sibling.firstName + " " + sibling.lastName + "\n";
+        })
+        .join("");
+
+      let spouse = getSpouse(person, people)
+        .map(function (spouse) {
+          return "Spouse: " + spouse.firstName + " " + spouse.lastName + "\n";
+        })
+        .join("");
+
+      family.push(siblings);
+      family.push(spouse);
+      alert(family);
       break;
     case "descendants":
       // TODO: get person's descendants
@@ -285,6 +302,28 @@ function getChildren(person, people) {
   // }
   return children;
 }
+
+function getSiblings(person, people) {
+  let parents = [];
+  let parentOne;
+  let parentTwo;
+  if (parents.length === 1) {
+    parentOne = person.parents[0];
+  } else {
+    parentOne = person.parents[0];
+    parentTwo = person.parents[1];
+  }
+  for (let i = 0; i < people.length; i++) {
+    if (people[i].parents.includes(parentOne) || people[i].parents.includes(parentTwo)) {
+      if (people[i].id !== person.id) {
+        parents.push(people[i]);
+      }
+    }
+  }
+  return parents;
+}
+
+function getFamilyTree(person, callback) {}
 
 function getFirstAndLastNameFromObject(obj) {
   return `${obj.firstName} ${obj.lastName}`;

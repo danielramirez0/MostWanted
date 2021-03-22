@@ -61,9 +61,17 @@ function mainMenu(person, people) {
           return "Spouse: " + spouse.firstName + " " + spouse.lastName + "\n";
         })
         .join("");
+    
+      let parents = getParents(person, people)
+        .map(function (parents) {
+          return "Parents: " + parents.firstName + " " + parents.lastName + "\n";
+        })
+        .join("");
+
 
       family.push(siblings);
       family.push(spouse);
+      family.push(parents)
       alert(family);
       break;
     case "descendants":
@@ -323,6 +331,18 @@ function getSiblings(person, people) {
   return parents;
 }
 
+function getParents(people,person){
+  let parents = [];
+  let parentIds = person.parents;
+  let idOfPerson;
+  for (let i= 0; i < people.length; i++){
+    idOfPerson= people[i].id;
+    if(parentIds.includes(idOfPerson)){
+      parents.push(people[i]);
+    }
+  }
+  return parents;
+}
 function getFamilyTree(person, callback) {}
 
 function getFirstAndLastNameFromObject(obj) {

@@ -295,13 +295,16 @@ function getChildren(person, people) {
 
 function getSiblings(person, people) {
   let siblings = [];
+  let parents = person.parents;
   let parentOne;
   let parentTwo;
-  if (siblings.length === 1) {
+  if (parents.length === 1) {
     parentOne = person.parents[0];
-  } else {
+  } else if (parent.length > 1) {
     parentOne = person.parents[0];
     parentTwo = person.parents[1];
+  } else {
+    return siblings;
   }
   for (let i = 0; i < people.length; i++) {
     if (people[i].parents.includes(parentOne) || people[i].parents.includes(parentTwo)) {

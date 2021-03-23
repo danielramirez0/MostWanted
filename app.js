@@ -49,29 +49,14 @@ function mainMenu(person, people) {
     case "family":
       // TODO: get person's family
       let family = [];
+      let siblings = getSiblings(person, people);
+      let spouse = getSpouse(person, people);
+      let parents = getParents(person, people);
 
-      let siblings = getSiblings(person, people)
-        .map(function (sibling) {
-          return "Sibling: " + sibling.firstName + " " + sibling.lastName + "\n";
-        })
-        .join("");
-
-      let spouse = getSpouse(person, people)
-        .map(function (spouse) {
-          return "Spouse: " + spouse.firstName + " " + spouse.lastName + "\n";
-        })
-        .join("");
-
-      let parents = getParents(person, people)
-        .map(function (parents) {
-          return "Parents: " + parents.firstName + " " + parents.lastName + "\n";
-        })
-        .join("");
-
-      family.push(siblings);
-      family.push(spouse);
-      family.push(parents);
-      alert(family);
+      family.push(buildFamilyTree(siblings, "Sibling"));
+      family.push(buildFamilyTree(spouse, "Spouse"));
+      family.push(buildFamilyTree(parents, "Parent"));
+      alert(family.join("\n"));
       break;
     case "descendants":
       // TODO: get person's descendants
@@ -311,10 +296,10 @@ function getChildren(person, people) {
 }
 
 function getSiblings(person, people) {
-  let parents = [];
+  let siblings = [];
   let parentOne;
   let parentTwo;
-  if (parents.length === 1) {
+  if (siblings.length === 1) {
     parentOne = person.parents[0];
   } else {
     parentOne = person.parents[0];
@@ -323,22 +308,24 @@ function getSiblings(person, people) {
   for (let i = 0; i < people.length; i++) {
     if (people[i].parents.includes(parentOne) || people[i].parents.includes(parentTwo)) {
       if (people[i].id !== person.id) {
-        parents.push(people[i]);
+        siblings.push(people[i]);
       }
     }
   }
-  return parents;
+  return siblings;
 }
 
 function getSpouse(person, people) {
   for (let i = 0; i < people.length; i++) {
     if (people[i].id === person.currentSpouse) {
       return people[i];
+    } else {
+      return -1;
     }
   }
 }
 
-function getParents(people, person) {
+function getParents(person, people) {
   let parents = [];
   let parentIds = person.parents;
   let idOfPerson;
@@ -350,7 +337,16 @@ function getParents(people, person) {
   }
   return parents;
 }
-function getFamilyTree(person, callback) {}
+function buildFamilyTree(familyMembers, relationship) {
+  if (familyMembers.length > 0) {
+    familyMembers = familyMembers.map(function (member) {
+      return `${relationship}: ` + member.firstName + " " + member.lastName;
+    });
+  } else {
+    return "This person has no " + relationship;
+  }
+  return familyMembers;
+}
 
 function getFirstAndLastNameFromObject(obj) {
   return `${obj.firstName} ${obj.lastName}`;
@@ -365,6 +361,7 @@ function displayDescendants(person, descendants) {
   });
   alert(`${person.firstName} ${person.lastName}'s descendants are:\n${descendants.join("\n")}`);
 }
+
 // alerts a list of people
 function displayPeople(people) {
   alert(

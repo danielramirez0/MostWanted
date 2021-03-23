@@ -7,6 +7,7 @@ Build all of your functions for displaying and gathering information below (GUI)
 function app(people) {
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   let searchResults;
+  let traitSearchResults;
   switch (searchType) {
     case "yes":
       searchResults = searchByName(people);
@@ -14,12 +15,12 @@ function app(people) {
     case "no":
       let numberOfKnownTraits = parseInt(promptFor("How many traits do you know about this person?", checkForNumber));
       for (let i = 0; i < numberOfKnownTraits; i++) {
-        searchResults = startSearchingByTraits(i === 0 ? people : searchResults);
+        traitSearchResults=startSearchingByTraits(i === 0 ? people : traitSearchResults);
       }
-      if (searchResults.length > 1) {
-        searchResults = getUniquePersonFrom(searchResults);
+      if (traitSearchResults.length > 1) {
+        searchResults = getUniquePersonFrom(traitSearchResults);
       } else {
-        searchResults = searchResults[0];
+        searchResults = traitSearchResults[0];
       }
       break;
     default:
@@ -60,57 +61,65 @@ function mainMenu(person, people) {
       let lineage = getChildren(person, people);
       displayDescendants(person, lineage);
       return mainMenu(person, people); // ask again
-      case "restart":
-        app(people); // restart
-        break;
+    case "restart":
+      app(people); // restart
+      break;
     case "quit":
       return; // stop execution
-      default:
-        return mainMenu(person, people); // ask again
-      }
+    default:
+      return mainMenu(person, people); // ask again
+  }
 }
 
 // Search for person by selected traits
-function startSearchingByTraits(people,numberOfSearches) {
-  let searchResults;
+function startSearchingByTraits(people) {
+  let searchResults=[]
   let traits = Object.keys(people[0]);
   let searchType;
-  for (i=0; i < numberOfSearches;i++){
-    searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
-    seachType = searchType.toLowerCase().replaceAll(' ');
-    searchResults = searchByTrait(people,searchType);
+
+  searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
+  searchType = searchType.toLowerCase().replaceAll(' ');
+//   for(let i=0; i<traits.length;i++){
+//     if (searchType != traits[i]){
+//     return startSearchingByTraits(people);
+//     }
+//     else{
+//       searchResults = searchByTrait(people, searchType); 
+//     }
+//   }
+//  return searchResults;
+// }
+  switch (traitSearch) {
+    case "id":
+      searchResults = searchByTrait(people , 'id');
+      break;
+    case "firstname":
+      searchResults = searchByTrait(people, 'firstName');
+      break;
+    case "lastname":
+      searchResults = searchByTrait(people, 'lastName');
+      break;
+    case "gender":
+      searchResults = searchByTrait(people, 'gender');
+      break;
+    case "dob":
+      searchResults = searchByTrait(people, 'dob');
+      break;
+    case "height":
+      searchResults = searchByTrait(people, 'height');
+      break;
+    case "weight":
+      searchResults = searchByTrait(people, 'weight');
+      break;
+    case "eyecolor":
+      searchResults = searchByTrait(people, 'eyeColor');
+      break;
+    case "occupation":
+      searchResults = searchByTrait(people, 'occupation');
+      break;
+    default:
+      return startSearchingByTraits(people);
   }
-  // switch (traitSearch) {
-  //   case "id":
-  //     searchResults = searchByid(people);
-  //     break;
-  //   case "firstname":
-  //     searchResults = searchByFirstName(people);
-  //     break;
-  //   case "lastname":
-  //     searchResults = searchByLastName(people);
-  //     break;
-  //   case "gender":
-  //     searchResults = searchByGender(people);
-  //     break;
-  //   case "dob":
-  //     searchResults = searchByDOB(people);
-  //     break;
-  //   case "height":
-  //     searchResults = searchByHeight(people);
-  //     break;
-  //   case "weight":
-  //     searchResults = searchByWeight(people);
-  //     break;
-  //   case "eyecolor":
-  //     searchResults = searchByEyeColor(people);
-  //     break;
-  //   case "occupation":
-  //     searchResults = searchByOccupation(people);
-  //     break;
-  //   default:
-  //     return startSearchingByTraits(people);
-  // }
   return searchResults;
 }
 // Methods of searching
@@ -255,17 +264,24 @@ function searchByFirstName(people) {
   });
   return foundPerson;
 }
-function searchByTrait(people,specificTrait){
-    let userInput= promptFor("what is the person's " + specificTrait + ":", chars);
-    let foundPerson = people.filter(function (person){
-      if(person[specificTrait] == userInput){
-        return true;
-      }
-      else {
-        return false;
-      }
-    })
-    return foundPerson;
+function getAge(dateOfBirth) {
+  let d = new Date();
+  let y = d.getFullYear();
+  let yearOfBirth = dateOfBirth.split('/')[2];
+  let age = y - yearOfBirth;
+  return age;
+}
+function searchByTrait(people, specificTrait) {
+  let userInput = promptFor("what is the person's " + specificTrait + ":", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person[specificTrait] == userInput) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  })
+  return foundPerson;
 }
 // Secelction of person after search filtering
 function getUniquePersonFrom(filteredPeople) {
@@ -389,7 +405,7 @@ function displayPerson(person) {
   personInfo += "Weight: " + person.weight + "\n";
   personInfo += "Eye Color: " + person.eyeColor + "\n";
   personInfo += "Occupation: " + person.occupation + "\n";
-  personInfo += "Age " + person.age + "\n";
+  personInfo += "Age: " + getAge(person.dob) + "\n";
   alert(personInfo);
 }
 
@@ -397,11 +413,11 @@ function displayPerson(person) {
 function promptFor(question, valid) {
   try {
     do {
-    var response = prompt(question).trim();
-  } while (!response || !valid(response));
-  return response;
-  } 
-    catch (error) {
+      var response = prompt(question).trim();
+    } while (!response || !valid(response));
+    return response;
+  }
+  catch (error) {
     console.log(error);
   }
 }

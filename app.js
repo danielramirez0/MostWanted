@@ -71,42 +71,46 @@ function mainMenu(person, people) {
 }
 
 // Search for person by selected traits
-function startSearchingByTraits(people) {
+function startSearchingByTraits(people, numberOfSearches) {
   let searchResults;
   let traits = Object.keys(people[0]);
-  let searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
-  let traitSearch = searchType.toLowerCase().replaceAll(" ");
-  switch (traitSearch) {
-    case "id":
-      searchResults = searchByid(people);
-      break;
-    case "firstname":
-      searchResults = searchByFirstName(people);
-      break;
-    case "lastname":
-      searchResults = searchByLastName(people);
-      break;
-    case "gender":
-      searchResults = searchByGender(people);
-      break;
-    case "dob":
-      searchResults = searchByDOB(people);
-      break;
-    case "height":
-      searchResults = searchByHeight(people);
-      break;
-    case "weight":
-      searchResults = searchByWeight(people);
-      break;
-    case "eyecolor":
-      searchResults = searchByEyeColor(people);
-      break;
-    case "occupation":
-      searchResults = searchByOccupation(people);
-      break;
-    default:
-      return startSearchingByTraits(people);
+  let searchType;
+  for (i = 0; i < numberOfSearches; i++) {
+    searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
+    seachType = searchType.toLowerCase().replaceAll(" ");
+    searchResults = searchByTrait(people, searchType);
   }
+  // switch (traitSearch) {
+  //   case "id":
+  //     searchResults = searchByid(people);
+  //     break;
+  //   case "firstname":
+  //     searchResults = searchByFirstName(people);
+  //     break;
+  //   case "lastname":
+  //     searchResults = searchByLastName(people);
+  //     break;
+  //   case "gender":
+  //     searchResults = searchByGender(people);
+  //     break;
+  //   case "dob":
+  //     searchResults = searchByDOB(people);
+  //     break;
+  //   case "height":
+  //     searchResults = searchByHeight(people);
+  //     break;
+  //   case "weight":
+  //     searchResults = searchByWeight(people);
+  //     break;
+  //   case "eyecolor":
+  //     searchResults = searchByEyeColor(people);
+  //     break;
+  //   case "occupation":
+  //     searchResults = searchByOccupation(people);
+  //     break;
+  //   default:
+  //     return startSearchingByTraits(people);
+  // }
   return searchResults;
 }
 // Methods of searching
@@ -251,7 +255,17 @@ function searchByFirstName(people) {
   });
   return foundPerson;
 }
-
+function searchByTrait(people, specificTrait) {
+  let userInput = promptFor("what is the person's " + specificTrait + ":", chars);
+  let foundPerson = people.filter(function (person) {
+    if (person[specificTrait] == userInput) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  return foundPerson;
+}
 // Secelction of person after search filtering
 function getUniquePersonFrom(filteredPeople) {
   let names = [];

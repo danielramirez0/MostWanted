@@ -45,30 +45,29 @@ function mainMenu(person, people) {
   switch (displayOption) {
     case "info":
       displayPerson(person);
-      break;
+      return mainMenu(person, people); // ask again
     case "family":
       let family = [];
       let siblings = getSiblings(person, people);
       let spouse = getSpouse(person, people);
       let parents = getParents(person, people);
-
       family.push(buildFamilyTree(siblings, "Sibling"));
       family.push(buildFamilyTree(spouse, "Spouse"));
       family.push(buildFamilyTree(parents, "Parent"));
       alert(family.join("\n"));
-      break;
+      return mainMenu(person, people); // ask again
     case "descendants":
       let lineage = getChildren(person, people);
       displayDescendants(person, lineage);
-      break;
-    case "restart":
-      app(people); // restart
-      break;
+      return mainMenu(person, people); // ask again
+      case "restart":
+        app(people); // restart
+        break;
     case "quit":
       return; // stop execution
-    default:
-      return mainMenu(person, people); // ask again
-  }
+      default:
+        return mainMenu(person, people); // ask again
+      }
 }
 
 // Search for person by selected traits
@@ -76,7 +75,7 @@ function startSearchingByTraits(people) {
   let searchResults;
   let traits = Object.keys(people[0]);
   let searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
-  let traitSearch = searchType.toLowerCase();
+  let traitSearch = searchType.toLowerCase().replaceAll(' ');
   switch (traitSearch) {
     case "id":
       searchResults = searchByid(people);
@@ -260,7 +259,7 @@ function getUniquePersonFrom(filteredPeople) {
   for (let i = 0; i < filteredPeople.length; i++) {
     names.push(filteredPeople[i].firstName + " " + filteredPeople[i].lastName);
   }
-  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names.join("\n")}\n\n` + "Do you want to search by name?", yesNo);
+  let selection = promptFor("Here are all the people who have those traits:\n\n" + `${names.join("\n")}\n\n` + "Do you want to search by name, yes or no?", yesNo);
   if (selection === "yes") {
     uniquePerson = searchByName(filteredPeople);
   } else {
@@ -381,10 +380,15 @@ function displayPerson(person) {
 
 // function that prompts and validates user input
 function promptFor(question, valid) {
-  do {
+  try {
+    do {
     var response = prompt(question).trim();
   } while (!response || !valid(response));
   return response;
+  } 
+    catch (error) {
+    console.log(error);
+  }
 }
 
 // helper function to pass into promptFor to validate yes/no answers

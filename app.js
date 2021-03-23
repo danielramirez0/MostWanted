@@ -47,7 +47,6 @@ function mainMenu(person, people) {
       displayPerson(person);
       break;
     case "family":
-      // TODO: get person's family
       let family = [];
       let siblings = getSiblings(person, people);
       let spouse = getSpouse(person, people);
@@ -59,7 +58,6 @@ function mainMenu(person, people) {
       alert(family.join("\n"));
       break;
     case "descendants":
-      // TODO: get person's descendants
       let lineage = getChildren(person, people);
       displayDescendants(person, lineage);
       break;
@@ -274,24 +272,24 @@ function getUniquePersonFrom(filteredPeople) {
 
 function getChildren(person, people) {
   let children = [];
-  // let grandChildren = [];
+  let grandChildren = [];
   for (let i = 0; i < people.length; i++) {
     if (people[i].parents.includes(person.id)) {
       children.push(people[i]);
     }
   }
-  // if (children.length > 0) {
-  // for (let i = 0; i < children.length; i++) {
-  // grandChildren = getChildren(children[i], people);
-  // }
-  // } else {
-  // return children;
-  // }
-  // if (grandChildren.length > 0) {
-  // for (let j = 0; j < grandChildren.length; j++) {
-  // children.push(grandChildren[j]);
-  // }
-  // }
+  if (children.length > 0) {
+    for (let i = 0; i < children.length; i++) {
+      grandChildren = getChildren(children[i], people);
+    }
+  } else {
+    return children;
+  }
+  if (grandChildren.length > 0) {
+    for (let j = 0; j < grandChildren.length; j++) {
+      children.push(grandChildren[j]);
+    }
+  }
   return children;
 }
 
@@ -318,11 +316,10 @@ function getSiblings(person, people) {
 function getSpouse(person, people) {
   for (let i = 0; i < people.length; i++) {
     if (people[i].id === person.currentSpouse) {
-      return people[i];
-    } else {
-      return -1;
+      return [people[i]];
     }
   }
+  return -1;
 }
 
 function getParents(person, people) {
@@ -346,13 +343,6 @@ function buildFamilyTree(familyMembers, relationship) {
     return "This person has no " + relationship;
   }
   return familyMembers;
-}
-
-function getFirstAndLastNameFromObject(obj) {
-  return `${obj.firstName} ${obj.lastName}`;
-  // let fullName = "First Name: " + obj.firstName + "\n";
-  // fullName += "Last Name: " + obj.lastName + "\n";
-  // return fullName
 }
 
 function displayDescendants(person, descendants) {

@@ -60,14 +60,14 @@ function mainMenu(person, people) {
       let lineage = getChildren(person, people);
       displayDescendants(person, lineage);
       return mainMenu(person, people); // ask again
-      case "restart":
-        app(people); // restart
-        break;
+    case "restart":
+      app(people); // restart
+      break;
     case "quit":
       return; // stop execution
-      default:
-        return mainMenu(person, people); // ask again
-      }
+    default:
+      return mainMenu(person, people); // ask again
+  }
 }
 
 // Search for person by selected traits
@@ -75,7 +75,7 @@ function startSearchingByTraits(people) {
   let searchResults;
   let traits = Object.keys(people[0]);
   let searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
-  let traitSearch = searchType.toLowerCase().replaceAll(' ');
+  let traitSearch = searchType.toLowerCase().replaceAll(" ");
   switch (traitSearch) {
     case "id":
       searchResults = searchByid(people);
@@ -269,6 +269,8 @@ function getUniquePersonFrom(filteredPeople) {
   return uniquePerson;
 }
 
+// map function can be your friend
+// default parameter could be cool( like an empty array maybe? )
 function getChildren(person, people) {
   let children = [];
   let grandChildren = [];
@@ -382,11 +384,10 @@ function displayPerson(person) {
 function promptFor(question, valid) {
   try {
     do {
-    var response = prompt(question).trim();
-  } while (!response || !valid(response));
-  return response;
-  } 
-    catch (error) {
+      var response = prompt(question).trim();
+    } while (!response || !valid(response));
+    return response;
+  } catch (error) {
     console.log(error);
   }
 }

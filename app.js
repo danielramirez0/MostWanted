@@ -78,10 +78,16 @@ function mainMenu(person, people) {
 // Search for person by selected traits
 function startSearchingByTraits(people) {
   let searchResults = [];
-  let traits = Object.keys(people[0]);
+  let traits = Object.keys(people[0]).splice(0, 9);
   let searchType;
+  let message = `Here are the ${traits.length} available traits you can use to search:\n\n`;
+  for (let i = 0; i < traits.length; i++) {
+    const element = traits[i];
+    message += `${i + 1}: ${traits[i]}\n`;
+  }
+  message += "Enter the number of the trait you want to use";
 
-  searchType = promptFor(`Here are the ${traits.length} available traits you can use to search:\n\n${traits.join("\n").toLowerCase()}\n\nType in a trait and click OK`, chars);
+  searchType = promptFor(message, chars);
   searchType = searchType.toLowerCase().replaceAll(" ");
   //   for(let i=0; i<traits.length;i++){
   //     if (searchType != traits[i]){
@@ -94,31 +100,31 @@ function startSearchingByTraits(people) {
   //  return searchResults;
   // }
   switch (searchType) {
-    case "id":
+    case "1":
       searchResults = searchByTrait(people, "id");
       break;
-    case "firstname":
+    case "2":
       searchResults = searchByTrait(people, "firstName");
       break;
-    case "lastname":
+    case "3":
       searchResults = searchByTrait(people, "lastName");
       break;
-    case "gender":
+    case "4":
       searchResults = searchByTrait(people, "gender");
       break;
-    case "dob":
+    case "5":
       searchResults = searchByTrait(people, "dob");
       break;
-    case "height":
+    case "6":
       searchResults = searchByTrait(people, "height");
       break;
-    case "weight":
+    case "7":
       searchResults = searchByTrait(people, "weight");
       break;
-    case "eyecolor":
+    case "8":
       searchResults = searchByTrait(people, "eyeColor");
       break;
-    case "occupation":
+    case "9":
       searchResults = searchByTrait(people, "occupation");
       break;
     default:
@@ -146,28 +152,26 @@ function searchByName(people) {
   return foundPerson;
 }
 
-function searchByLastName(people) {
-  let lastName = promptFor("What is the person's last name?", chars);
-  lastName = lastName[0].toUpperCase() + lastName.slice(1).toLowerCase();
-  let foundPerson = people.filter(function (person) {
-    if (person.lastName === lastName) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return foundPerson;
-}
-function searchByFirstName(people) {
-  let firstName = promptFor("What is the person's first name?", chars);
-  firstName = firstName[0].toUpperCase() + firstName.slice(1).toLowerCase();
-  let foundPerson = people.filter(function (person) {
-    if (person.firstName === firstName) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+function searchByTrait(people, specificTrait) {
+  let foundPerson;
+  let userInput = promptFor("what is the person's " + specificTrait + ":", chars);
+  if (parseInt(userInput) === NaN) {
+    foundPerson = people.filter(function (person) {
+      if (person[specificTrait].toLowerCase() == userInput.toLowerCase()) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  } else {
+    foundPerson = people.filter(function (person) {
+      if (person[specificTrait] == userInput) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
   return foundPerson;
 }
 function getAge(dateOfBirth) {
@@ -176,17 +180,6 @@ function getAge(dateOfBirth) {
   let yearOfBirth = dateOfBirth.split("/")[2];
   let age = y - yearOfBirth;
   return age;
-}
-function searchByTrait(people, specificTrait) {
-  let userInput = promptFor("what is the person's " + specificTrait + ":", chars);
-  let foundPerson = people.filter(function (person) {
-    if (person[specificTrait] == userInput) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return foundPerson;
 }
 // Secelction of person after search filtering
 function getUniquePersonFrom(filteredPeople) {

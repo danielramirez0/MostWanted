@@ -12,9 +12,14 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case "no":
+      const traits = Object.keys(people[0]).splice(0, 9);
       let numberOfKnownTraits = parseInt(promptFor("How many traits do you know about this person?", checkForNumber));
+      if (numberOfKnownTraits > traits.length) {
+        alert("Cannot search by " + numberOfKnownTraits + ". Must be less than or equal to " + traits.length + ". Restarting...");
+        return app(people);
+      }
       for (let i = 0; i < numberOfKnownTraits; i++) {
-        traitSearchResults = startSearchingByTraits(i === 0 ? people : traitSearchResults);
+        traitSearchResults = startSearchingByTraits(i === 0 ? people : traitSearchResults, traits);
       }
       if (traitSearchResults.length > 1) {
         searchResults = getUniquePersonFrom(traitSearchResults);
@@ -34,7 +39,8 @@ function mainMenu(person, people) {
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
   if (!person) {
     alert("Could not find that individual.");
-    return app(people); // restart
+    return promptFor("Do you want to restart?") === "yes" ? app(people) : null;
+    // return app(people); // restart
   }
   let family = [];
   let siblings = getSiblings(person, people);
@@ -69,18 +75,15 @@ function mainMenu(person, people) {
   }
 }
 // Search for person by selected traits
-function startSearchingByTraits(people) {
+function startSearchingByTraits(people, traits) {
   let searchResults = [];
-  let traits = Object.keys(people[0]).splice(0, 9);
   let searchType;
   let message = `Here are the ${traits.length} available traits you can use to search:\n\n`;
   for (let i = 0; i < traits.length; i++) {
-    const element = traits[i];
     message += `${i + 1}: ${traits[i]}\n`;
   }
   message += "Enter the number of the trait you want to use";
   searchType = promptFor(message, chars);
-  searchType = searchType.toLowerCase().replaceAll(" ");
   switch (searchType) {
     case "1":
       searchResults = searchByTrait(people, "id");
